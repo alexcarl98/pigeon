@@ -1,0 +1,64 @@
+Kot {
+	Program = Stmt+
+    
+    Stmt = let id "=" Exp ";" 							--vardec
+         | fun id "(" Params ")" "=" Exp ";"	--fundec
+         | while Exp Block				--while
+         | break ";"						--break
+         | Var "=" Exp ";" 				--assign
+         | print "(" Exp ")" ";"						--print
+    
+    Params  =  ListOf<Param, ",">
+    Param   = id ":" Type
+    
+    Type    = Type "[" "]"  --array
+            | id
+
+    Block   = "{" Stmt* "}"
+    
+    Exp     = "-" Primary 						    --negate
+            | Exp1 "?" Exp1 ":" Exp 				--conditional
+            | Exp1
+    Exp1    = Exp1 "||" Exp2  						--or
+            | Exp2
+    Exp2    = Exp2 "&&" Exp3 						--and
+            | Exp3
+    Exp3    = Exp3 relop Exp4 					    --compare
+     	    | Exp4
+    Exp4    = Exp4 ("+"|"-") Term      			    --add
+      	    | Term
+    Term    = Term ("*"|"/"| "%") Factor            --mul
+      	    | Factor
+    Factor  = Primary "**" Factor  			        --exp
+            | Primary
+    
+    Primary = Call
+            | num
+            | string
+            | bool
+            | true
+            | false
+            | Var
+            | "(" Exp ")" 					        --parens
+    Var     = ~num Primary "[" Exp "]" 	            --subscript
+    		| id
+
+	Call    = Var "(" ListOf<Exp, "," >  ")"
+    relop   = "<=" | "<" | "==" | "!=" | ">=" | ">"    
+    let     = "let" ~idchar 
+    fun     = "fun" ~idchar 
+    while   = "while" ~idchar 
+    break   = "break" ~idchar 
+    print   = "print" ~idchar
+    true    = "true" ~idchar
+    false   = "false" ~idchar
+    
+    keyword = let | fun | while | break | print | true | false
+	id 		= ~keyword &letter idchar+
+    idchar 	= letter | digit | "_"
+    num 	= digit+ ("." digit+)? (("E"|"e") ("+"|"-")? digit+)?
+    bool    = true | false
+    string  = "\"" char* "\""
+    char    = ~"\n" ~"\\" ~"\"" any	               --regular
+    		| "\\" any						       --escaped
+}
