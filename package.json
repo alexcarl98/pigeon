@@ -1,0 +1,21 @@
+{
+  "name": "pigeon",
+  "version": "1.0.0",
+  "description": "compiler for kot",
+  "main": "pigeon.js",
+  "type": "module",
+  "scripts": {
+    "test": "c8 mocha"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "graph-stringify": "^1.1.0",
+    "ohm-js": "^17.1.0"
+  },
+  "devDependencies": {
+    "c8": "^9.1.0",
+    "mocha": "^10.4.0"
+  }
+}

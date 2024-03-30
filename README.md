@@ -1,2 +1,2 @@
-# pigeon
-compiler for pigeon
+# Kot
+compiler for kot

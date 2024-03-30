@@ -1,0 +1,57 @@
+Kot {
+	Program = Stmt+
+    
+    Stmt = let id "=" Exp ";" 							--vardec
+    		 | fun id "(" Params ")" "=" Exp ";"	--fundec
+             | while Exp Block				--while
+             | break ";"						--break
+             | Var "=" Exp ";" 				--assign
+             | print "(" Exp ")" ";"						--print
+    
+    Params =  ListOf<Param, ",">
+    Param = id ":" Type
+    
+    Type = Type "[" "]"  --array
+     		  | id
+
+    Block = "{" Stmt* "}"
+    
+    Exp = Exp1 "?" Exp1 ":" Exp 				--conditional
+           | Exp1
+     Exp1 = Exp1 "||" Exp2  						--or
+               | Exp2
+     Exp2 = Exp2 "&&" Exp3 						--and
+     		  | Exp3
+     Exp3 = Exp3 relop Exp4 					--compare
+     		  | Exp4
+      Exp4 = Exp4 ("+"|"-") Term      			--add
+      		    | Term
+      Term = Term ("*"|"/"| "%") Factor      --mul
+      		    | Factor
+      Factor = Primary "**" Factor  			-- exp
+                  | Primary
+    
+    Primary = Call
+    			  | num
+                  | string
+                  | Var
+                  | "(" Exp ")" 					--parens
+    Var = ~num Primary "[" Exp "]" 	--subscript
+    		| id
+
+	Call = Var "(" ListOf<Exp, "," >  ")"
+    relop  = "<=" | "<" | "==" | "!=" | ">=" | ">"    
+    let = "let" ~idchar 
+    fun = "fun" ~idchar 
+    while = "while" ~idchar 
+    break 	  = "break" ~idchar 
+    print 		= "print" ~idchar
+    
+    keyword = let | fun | while | break | print
+	id 			= ~keyword &letter idchar+
+    idchar 	= letter | digit | "_"
+    num 	= digit+ ("." digit+)? (("E"|"e") ("+"|"-")? digit+)?
+    string = "\"" char* "\""
+    char = ~"\n" ~"\\" ~"\"" any	--regular
+    		| "\\" any						--escaped
+}
