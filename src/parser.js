@@ -1,5 +1,9 @@
 import * as fs from 'node:fs';
 import * as ohm from 'ohm-js';
+/**
+ * This parser will receive a grammar, and produces a match object from Ohm dependent on the source code
+ * 
+ */
 
 const grammar = ohm.grammar(fs.readFileSync('src/kot.ohm'));
 

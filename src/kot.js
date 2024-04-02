@@ -1,3 +1,8 @@
+/*************
+ * kot.js :
+ * allows us to launch our programs from the command line
+ **************/
+
 import * as fs from 'fs/promises';
 import compile from "./compiler.js"
 
@@ -11,6 +16,7 @@ Syntax: node kot.js <filename> <outputType>
     optimized: to show the optimized program
     js: to generate JavaScript code
 `
+
 async function compileFromFile(filename, outputType) {
   try {
     const buffer = await fs.readFile(filename)
